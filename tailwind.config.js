@@ -3,7 +3,17 @@
 export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
-    extend: {}
+    extend: {
+      colors: {
+        secondary: '#FFFBD3'
+      },
+      fontFamily: {
+        sans: ['"Outfit"', 'sans-serif']
+      },
+      gridTemplateRows: {
+        main: '3rem 4fr 6fr'
+      }
+    }
   },
   plugins: []
 };

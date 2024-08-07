@@ -23,3 +23,6 @@ vite.config.ts.timestamp-*
 # IDE
 .idea
 .vscode
+
+#npm
+package-lock.json
