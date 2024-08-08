@@ -5,7 +5,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        secondary: '#FFFBD3'
+        primary: '#94E170',
+        secondary: '#FFFBD3',
+        accent: '#FD9494'
       },
       fontFamily: {
         sans: ['"Outfit"', 'sans-serif']
