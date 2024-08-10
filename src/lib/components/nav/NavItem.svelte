@@ -1,5 +1,5 @@
 <script>
-  import clickOutside from '$lib/actions/clickOutside';
+  import clickOutside from '$lib/actions/click-outside';
 
   export let name;
 

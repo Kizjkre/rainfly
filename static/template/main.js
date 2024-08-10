@@ -1,8 +1,10 @@
-const context = new AudioContext({sampleRate: 48000});
-const oscillator = new OscillatorNode(context);
+// Use `context` as the AudioContext
+// @sampleRate = 48000
 
+const oscillator = new OscillatorNode(context);
 await context.audioWorklet.addModule('./bypass-processor.js');
 const workletNode = new AudioWorkletNode(context, 'bypass-processor');
 
 oscillator.connect(workletNode).connect(context.destination);
 oscillator.start();
+oscillator.stop(context.currentTime + 1)

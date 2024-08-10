@@ -1,17 +1,18 @@
 <script>
   import {onDestroy, onMount} from 'svelte';
+  import {runProcessorCode, runMainCode} from '$lib/actions/audio-host.js'
 
   /**
    * @type {string} - "processor" | "main"
    */
   export let id = "main";
   /**
-   * @type {1 | 2} - 1 for processor, 2 for main
+   * @type {0 | 1} - 0 for processor, 1 for main
    */
   let editorType;
   const editorTypes = Object.freeze({
-    "processor": 1,
-    "main": 2
+    "processor": 0,
+    "main": 1
   })
   $: editorType = id === "processor" ? editorTypes.processor : editorTypes.main;
 
@@ -33,6 +34,7 @@
     editor = monaco.editor.create(editorContainer, {
       minimap: {enabled: false},
       fontSize: 14,
+      scrollBeyondLastLine: false
       // automaticLayout: true,
     });
     const model = monaco.editor.createModel(
@@ -41,10 +43,12 @@
     );
     editor.setModel(model);
 
+    // temp testing
     editor.onDidChangeModelContent(() => {
       console.log(getEditorCode())
     });
 
+    initKeyBindings();
   });
 
   onDestroy(() => {
@@ -63,7 +67,36 @@
     return "";
   }
 
+  /**
+   * Update editor contents
+   * @param code {string} 
+   */
+  function setEditorCode(code) {
+    editor?.setValue(code);
+  }
+
+  function runEditorCode() {
+    const code = getEditorCode();
+    if (code === "") return;
+
+    if (editorType === editorTypes.processor) {
+      runProcessorCode(code);
+    } else {
+      runMainCode(code);
+    }
+  }
+
+  function initKeyBindings() {
+    editor.addAction({
+      id: 'runCode',
+      label: 'runCode',
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
+      run: function() {runEditorCode()}
+    });
+  }
+
 </script>
+
 <svelte:window on:resize={resizeEditor}/>
 
 <div class="container">
