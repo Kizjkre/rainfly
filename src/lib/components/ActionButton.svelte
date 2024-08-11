@@ -23,13 +23,15 @@
   $: {
     switch($status) {
       case Status.play:
+        playButtonText = "Run"
+        showStop = true;
       case Status.running:
         showStop = true;
         playButtonText = "Pause";
         break;
       case Status.pause:
         showStop = true;
-        playButtonText = "Run";
+        playButtonText = "Play";
         break;
       default:
       case Status.stop:

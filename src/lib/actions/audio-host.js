@@ -56,7 +56,7 @@ export async function runMainCode(code) {
     context = new AudioContext({sampleRate})
 
     let codeModule = replaceModuleUrl(code)
-    eval(`"use strict";\n(async () => {\n${codeModule}})()`)
+    eval(`"use strict";\n(async () => {\n${codeModule}\n})()`)
 }
 
 export function resumeContext() {

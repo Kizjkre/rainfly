@@ -15,6 +15,7 @@
       case Status.play:
         runEditorProcessor();
         runEditorMain();
+        // TODO: check for compile error, set status to stop or something - tzfeng
         break;
       case Status.running:
         resumeContext();
