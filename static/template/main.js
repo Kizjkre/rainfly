@@ -7,4 +7,3 @@ const workletNode = new AudioWorkletNode(context, 'bypass-processor');
 
 oscillator.connect(workletNode).connect(context.destination);
 oscillator.start();
-oscillator.stop(context.currentTime + 1)

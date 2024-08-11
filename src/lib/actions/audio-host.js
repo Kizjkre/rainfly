@@ -8,9 +8,9 @@ let sampleRate = 48000;
 let _blobUrl = "";
 
 /**
- * Replace addModule url to be blobUrl
+ * Replace addModule url to be blobUrl for AudioWorkletNode
  * @param {string} code - code containing addModule function
- * @returns code with addModule replaced to blobUrl
+ * @returns code with addModule url replaced to blobUrl
  */
 function replaceModuleUrl(code) {
     if (_blobUrl === "") {
@@ -20,7 +20,7 @@ function replaceModuleUrl(code) {
 }
 
 /**
- * Parse parameter from code string
+ * Parse parameter from header code comments
  * @param {string} code code to parse
  * @param {string} paramName // @paramName = value
  * @returns parsed parameter value
@@ -36,7 +36,6 @@ function parseParam(code, paramName) {
  * @param {string} code - Processor code to run
  */
 export function runProcessorCode(code) {
-    console.log("run processor")
     _blobUrl = window.URL.createObjectURL(
         new Blob([code], {type: 'text/javascript'})
     );
@@ -48,7 +47,6 @@ export function runProcessorCode(code) {
  * @param {string} code - AudioContext Graph code to run
  */
 export async function runMainCode(code) {
-    console.log("run main")
     await context?.close();
 
     const tryParseSampleRate = parseParam(code, "sampleRate");
@@ -58,7 +56,7 @@ export async function runMainCode(code) {
     context = new AudioContext({sampleRate})
 
     let codeModule = replaceModuleUrl(code)
-    eval(`(async () => {${codeModule}})()`)
+    eval(`"use strict";\n(async () => {\n${codeModule}})()`)
 }
 
 export function resumeContext() {
@@ -67,4 +65,9 @@ export function resumeContext() {
 
 export function suspendContext() {
     context?.suspend();
+}
+
+export function stopContext() {
+    context?.close();
+    context = undefined;
 }

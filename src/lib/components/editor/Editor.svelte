@@ -45,7 +45,7 @@
 
     // temp testing
     editor.onDidChangeModelContent(() => {
-      console.log(getEditorCode())
+      // console.log(getEditorCode())
     });
 
     initKeyBindings();
@@ -56,7 +56,7 @@
     editor?.dispose();
   })
 
-  function resizeEditor () {
+  function resizeEditor() {
     editor?.layout();
   }
 
@@ -75,7 +75,10 @@
     editor?.setValue(code);
   }
 
-  function runEditorCode() {
+  /**
+   * Run the editor code, passing code to audio host system
+   */
+  export function runEditorCode() {
     const code = getEditorCode();
     if (code === "") return;
 
@@ -87,12 +90,12 @@
   }
 
   function initKeyBindings() {
-    editor.addAction({
-      id: 'runCode',
-      label: 'runCode',
-      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
-      run: function() {runEditorCode()}
-    });
+    // editor.addAction({
+    //   id: 'runCode',
+    //   label: 'runCode',
+    //   keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
+    //   run: function() {runEditorCode()}
+    // });
   }
 
 </script>
