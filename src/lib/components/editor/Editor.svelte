@@ -1,6 +1,7 @@
 <script>
   import {onDestroy, onMount} from 'svelte';
   import {runProcessorCode, runMainCode} from '$lib/actions/audio-host.js'
+  import {vimStatus} from '$lib/stores/vim-status';
 
   /**
    * @type {string} - "processor" | "main"
@@ -14,7 +15,6 @@
     "processor": 0,
     "main": 1
   })
-  $: editorType = id === "processor" ? editorTypes.processor : editorTypes.main;
 
   /** @type {typeof import('./monaco').default} */
   let monaco;
@@ -23,8 +23,26 @@
   /** @type {HTMLDivElement} */
   let editorContainer;
 
+  /** @type {typeof import('monaco-vim').initVimMode} */
+  let initVimMode;
+  /** @type {typeof import('monaco-vim').VimMode} */
+  let vimMode;
+  /** @type {HTMLDivElement} */
+  export let vimBar;
+
+  let isMounted = false;
+
+  $: {
+    editorType = id === "processor" ? editorTypes.processor : editorTypes.main;
+
+    if (vimBar && isMounted) {
+      $vimStatus ? initVim() : stopVim();
+    }
+  }
+
   onMount(async () => {
     monaco = (await import('./monaco')).default;
+    initVimMode = (await import('monaco-vim')).initVimMode;
 
     const templateCode = editorType === editorTypes.processor ? 
         await (await fetch("template/processor.js")).text() :
@@ -49,6 +67,8 @@
     });
 
     initKeyBindings();
+
+    isMounted = true;
   });
 
   onDestroy(() => {
@@ -65,6 +85,19 @@
       return editor.getValue();
     }
     return "";
+  }
+
+  export function initVim() {
+    console.log(vimBar);
+    vimMode = initVimMode(editor, vimBar);
+    vimStatus.set(true);
+    resizeEditor();
+  }
+
+  export function stopVim() {
+    vimMode?.dispose();
+    vimStatus.set(false);
+    resizeEditor();
   }
 
   /**
