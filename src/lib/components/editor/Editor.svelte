@@ -156,6 +156,6 @@
     height: 100%;
   }
   .editor-container {
-    height: 100%;
+    height: calc(100% - 1.75rem);
   }
 </style>

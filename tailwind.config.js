@@ -13,7 +13,7 @@ export default {
         sans: ['"Outfit"', 'sans-serif']
       },
       gridTemplateRows: {
-        main: '3rem 5fr 5fr 1.75rem 1.75rem'
+        main: '3rem 4fr 6fr 1.5rem 1.5rem'
       }
     }
   },
