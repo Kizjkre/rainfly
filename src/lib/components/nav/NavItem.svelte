@@ -1,5 +1,6 @@
 <script>
   import clickOutside from '$lib/actions/click-outside';
+  import chevronDown from '$lib/assets/chevron-down.svg';
 
   export let name;
 
@@ -8,13 +9,13 @@
   let selected = false;
 
   const handleOpen = () => {
-    if (selected) dropdown.close();
+    if (selected) setTimeout(() => dropdown.close(), 100);
     else dropdown.show();
     selected = !selected;
   };
 
   const handleClickOutside = () => {
-    dropdown.close();
+    setTimeout(() => dropdown.close(), 100);
     selected = false;
   };
 </script>
@@ -28,10 +29,12 @@
   use:clickOutside={ handleClickOutside }
 >
   { name }
+  <img class="h-1/2" src={chevronDown} alt="down arrow">
   <dialog
     bind:this={ dropdown }
     class="bg-secondary m-0 py-1 rounded-b shadow-md w-max z-50"
-    class:hidden={ !$$slots.default }
+    class:fold={ !selected }
+    class:unfold={ selected }
   >
     <slot />
   </dialog>
