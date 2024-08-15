@@ -1,20 +1,20 @@
 <script>
-  import {onDestroy, onMount} from 'svelte';
-  import {runProcessorCode, runMainCode} from '$lib/actions/audio-host.js'
-  import {vimStatus} from '$lib/stores/vim-status';
+  import { onDestroy, onMount } from 'svelte';
+  import { runProcessorCode, runMainCode } from '$lib/actions/audio-host.js';
+  import { vimStatus } from '$lib/stores/vim-status';
 
   /**
    * @type {string} - "processor" | "main"
    */
-  export let id = "main";
+  export let id = 'main';
   /**
    * @type {0 | 1} - 0 for processor, 1 for main
    */
   let editorType;
   const editorTypes = Object.freeze({
-    "processor": 0,
-    "main": 1
-  })
+    'processor': 0,
+    'main': 1
+  });
 
   /** @type {typeof import('./monaco').default} */
   let monaco;
@@ -33,7 +33,7 @@
   let isMounted = false;
 
   $: {
-    editorType = id === "processor" ? editorTypes.processor : editorTypes.main;
+    editorType = id === 'processor' ? editorTypes.processor : editorTypes.main;
 
     if (vimBar && isMounted) {
       $vimStatus ? initVim() : stopVim();
@@ -44,13 +44,13 @@
     monaco = (await import('./monaco')).default;
     initVimMode = (await import('monaco-vim')).initVimMode;
 
-    const templateCode = editorType === editorTypes.processor ? 
-        await (await fetch("template/processor.js")).text() :
-        await (await fetch("template/main.js")).text();
+    const templateCode = editorType === editorTypes.processor ?
+      await (await fetch('template/processor.js')).text() :
+      await (await fetch('template/main.js')).text();
 
 
     editor = monaco.editor.create(editorContainer, {
-      minimap: {enabled: false},
+      minimap: { enabled: false },
       fontSize: 14,
       scrollBeyondLastLine: false
       // automaticLayout: true,
@@ -74,7 +74,7 @@
   onDestroy(() => {
     monaco?.editor.getModels().forEach((model) => model.dispose());
     editor?.dispose();
-  })
+  });
 
   function resizeEditor() {
     editor?.layout();
@@ -84,7 +84,7 @@
     if (editor) {
       return editor.getValue();
     }
-    return "";
+    return '';
   }
 
   export function initVim() {
@@ -102,7 +102,7 @@
 
   /**
    * Update editor contents
-   * @param code {string} 
+   * @param code {string}
    */
   function setEditorCode(code) {
     editor?.setValue(code);
@@ -113,7 +113,7 @@
    */
   export function runEditorCode() {
     const code = getEditorCode();
-    if (code === "") return;
+    if (code === '') return;
 
     if (editorType === editorTypes.processor) {
       runProcessorCode(code);
@@ -133,12 +133,12 @@
 
 </script>
 
-<svelte:window on:resize={resizeEditor}/>
+<svelte:window on:resize={resizeEditor} />
 
 <div class="container">
   <div class="header">
-    <div class="title">{editorType === editorTypes.processor ?  
-        "AudioWorkletProcessor" : "Main"}</div>
+    <div class="title">{editorType === editorTypes.processor ?
+      "AudioWorkletProcessor" : "Main"}</div>
   </div>
   <div class="editor-container" bind:this={editorContainer} />
 </div>
@@ -148,13 +148,16 @@
   .header {
     @apply px-2 h-7 flex items-center bg-primary;
   }
+
   .title {
     @apply inline-block font-semibold
   }
+
   .container {
     width: 100%;
     height: 100%;
   }
+
   .editor-container {
     height: calc(100% - 1.75rem);
   }

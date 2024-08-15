@@ -10,7 +10,8 @@ export default {
         accent: '#FD9494'
       },
       fontFamily: {
-        sans: ['"Outfit"', 'sans-serif']
+        sans: ['"Outfit"', 'sans-serif'],
+        mono: ['"Anonymous Pro"', 'monospace']
       },
       gridTemplateRows: {
         main: '3rem 4fr 6fr 1.5rem 1.5rem'
