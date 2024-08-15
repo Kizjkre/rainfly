@@ -35,24 +35,20 @@
 @keyframes unfold {
   0% {
     max-height: 0;
-    overflow: hidden;
   }
 
   100% {
     max-height: 10rem;
-    overflow: auto;
   }
 }
 
 @keyframes fold {
   0% {
     max-height: 10rem;
-    overflow: auto;
   }
 
   100% {
     max-height: 0;
-    overflow: hidden;
   }
 }
 
@@ -72,10 +68,12 @@ body, html {
 }
 
 .fold {
+  @apply overflow-hidden;
   animation: fold 0.1s ease-in-out forwards;
 }
 
 .unfold {
+  @apply overflow-hidden;
   animation: unfold 0.1s ease-in-out forwards;
 }
 

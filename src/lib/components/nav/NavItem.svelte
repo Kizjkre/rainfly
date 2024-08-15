@@ -1,6 +1,5 @@
 <script>
   import clickOutside from '$lib/actions/click-outside';
-  import chevronDown from '$lib/assets/chevron-down.svg';
 
   export let name;
 
@@ -21,7 +20,8 @@
 </script>
 
 <div
-  class="flex items-center relative select-none"
+  class="flex hover:text-accent items-center relative select-none"
+  class:text-accent={ selected }
   on:click={ handleOpen }
   on:keydown={ handleOpen }
   role="button"
@@ -29,7 +29,6 @@
   use:clickOutside={ handleClickOutside }
 >
   { name }
-  <img class="h-1/2" src={chevronDown} alt="down arrow">
   <dialog
     bind:this={ dropdown }
     class="bg-secondary m-0 py-1 rounded-b shadow-md w-max z-50"

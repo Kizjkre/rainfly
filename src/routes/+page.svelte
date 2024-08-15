@@ -19,8 +19,8 @@
   $: {
     switch ($status) {
       case Status.play:
-        // runEditorProcessor();
-        // runEditorMain();
+        runEditorProcessor();
+        runEditorMain();
         // TODO: check for compile error, set status to stop or something - tzfeng
         break;
       case Status.running:
@@ -34,7 +34,6 @@
         stopContext();
     }
   }
-
 </script>
 
 <svelte:document on:click={ clickOutsideListener } />
@@ -46,10 +45,10 @@
   <header class="col-span-2">
     <Visualizer />
   </header>
-  <section>
+  <section class="border-r border-black">
     <Editor id="processor" bind:runEditorCode={runEditorProcessor} bind:vimBar={vimBar1} />
   </section>
-  <section>
+  <section class="border-l border-black">
     <Editor id="main" bind:runEditorCode={runEditorMain} bind:vimBar={vimBar2} />
   </section>
   <section class:hidden={!$vimStatus}>
@@ -57,8 +56,5 @@
   </section>
   <section class:hidden={!$vimStatus}>
     <div class="vimBar" bind:this={vimBar2}></div>
-  </section>
-  <section class="col-span-2">
-    <div class="w-full h-7 bg-red-200">Console</div>
   </section>
 </main>
