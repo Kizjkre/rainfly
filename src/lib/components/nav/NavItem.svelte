@@ -1,5 +1,5 @@
 <script>
-  import clickOutside from '$lib/actions/click-outside';
+  import clickOutsideMap from '$lib/actions/click-outside-map';
 
   export let name;
 
@@ -26,7 +26,7 @@
   on:keydown={ handleOpen }
   role="button"
   tabindex="0"
-  use:clickOutside={ handleClickOutside }
+  use:clickOutsideMap={ handleClickOutside }
 >
   { name }
   <dialog

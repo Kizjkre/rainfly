@@ -1,6 +1,6 @@
-import { nodes } from '$lib/actions/click-outside';
+import { nodes } from '$lib/actions/click-outside-map';
 
-const clickOutsideListener = (e) =>
+const clickOutsideListener = (/** @type {Event} */ e) =>
   [...nodes.entries()].forEach(([node, callback]) =>
     node !== e.target && callback({
       ...e,

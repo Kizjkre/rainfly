@@ -1,5 +1,5 @@
 <script>
-  import { resumeContext, stopContext, suspendContext } from '$lib/actions/audio-host';
+  import { resumeContext, stopContext, suspendContext } from '$lib/utils/audio-host';
   import Nav from '$lib/components/nav/Nav.svelte';
   import Toast from '$lib/components/Toast.svelte';
   import Visualizer from '$lib/components/Visualizer.svelte';
@@ -8,27 +8,19 @@
   import { vimStatus } from '$lib/stores/vim-status';
   import clickOutsideListener from '$lib/utils/clickOutside';
 
-  /** @type {() => void} */
+  /** @type {(() => Promise<void>)} */
   let runEditorProcessor;
-  /** @type {() => void} */
+  /** @type {(() => Promise<void>)} */
   let runEditorMain;
   /** @type {HTMLDivElement} */
   let vimBar1;
   /** @type {HTMLDivElement} */
   let vimBar2;
-  /** @type {string} */
-  let error = '';
 
   $: {
     switch ($status) {
       case Status.play:
-        try {
-          runEditorProcessor();
-          runEditorMain();
-        } catch (/** @type {any} */ e) {
-          error = e.message;
-        }
-        // TODO: check for compile error, set status to stop or something - tzfeng
+        runCode();
         break;
       case Status.running:
         resumeContext();
@@ -42,7 +34,15 @@
     }
   }
 
-  const handleToastDismiss = () => setTimeout(() => error = '', 250);
+  async function runCode() {
+    runEditorProcessor();
+    try {
+      await runEditorMain();
+    } catch (error) {
+      status.set(Status.stop);
+      throw error;
+    }
+  }
 </script>
 
 <svelte:document on:click={ clickOutsideListener } />
@@ -67,5 +67,3 @@
     <div class="vimBar" bind:this={vimBar2}></div>
   </section>
 </main>
-
-<Toast on:click={handleToastDismiss} show={!!error}>{error}</Toast>

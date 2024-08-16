@@ -25,12 +25,10 @@
   }
 
   $: {
+    // update to next state
     switch ($status) {
       case Status.play:
-        playButtonText = 'Run';
-        icon = playerPlay;
-        showStop = true;
-      case Status.running: // BUG: wonky switch
+      case Status.running: 
         showStop = true;
         playButtonText = 'Pause';
         icon = playerPause;

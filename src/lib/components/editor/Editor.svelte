@@ -1,6 +1,7 @@
 <script>
+  import Toast from '$lib/components/Toast.svelte';
   import { onDestroy, onMount } from 'svelte';
-  import { runProcessorCode, runMainCode } from '$lib/actions/audio-host.js';
+  import { runProcessorCode, runMainCode } from '$lib/utils/audio-host.js';
   import { vimStatus } from '$lib/stores/vim-status';
 
   /**
@@ -29,6 +30,8 @@
   let vimMode;
   /** @type {HTMLDivElement} */
   export let vimBar;
+
+  let errorMsg = '';
 
   let isMounted = false;
 
@@ -110,14 +113,20 @@
   /**
    * Run the editor code, passing code to audio host system
    */
-  export function runEditorCode() {
+  export async function runEditorCode() {
     const code = getEditorCode();
     if (code === '') return;
 
     if (editorType === editorTypes.processor) {
       runProcessorCode(code);
     } else {
-      runMainCode(code);
+      try {
+        await runMainCode(code);
+        dismissError();
+      } catch (/** @type {any} */ error) {
+        errorMsg = error.message;
+        throw error;
+      }
     }
   }
 
@@ -128,6 +137,12 @@
     //   keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
     //   run: function() {runEditorCode()}
     // });
+  }
+
+  function dismissError() {
+    setTimeout(() => {
+      errorMsg = '';
+    }, 250);
   }
 
 </script>
@@ -141,6 +156,8 @@
   </div>
   <div class="editor-container" bind:this={editorContainer} />
 </div>
+
+<Toast on:click={dismissError} show={errorMsg !== ''}>{errorMsg}</Toast>
 
 
 <style lang="postcss">

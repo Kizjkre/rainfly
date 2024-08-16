@@ -1,5 +1,8 @@
 import { parse } from "svelte/compiler";
 
+// import AsyncFunction
+const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+
 /**
  * @type {AudioContext | undefined}
  */
@@ -56,7 +59,13 @@ export async function runMainCode(code) {
     context = new AudioContext({sampleRate})
 
     let codeModule = replaceModuleUrl(code)
-    eval(`"use strict";\n(async () => {\n${codeModule}\n})()`)
+
+    const evalFunction = new AsyncFunction('context', 'sampleRate', codeModule);
+    try {
+        await evalFunction(context, sampleRate);
+    } catch (error) {
+        throw error;
+    }
 }
 
 export function resumeContext() {
