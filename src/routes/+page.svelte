@@ -1,6 +1,7 @@
 <script>
   import { resumeContext, stopContext, suspendContext } from '$lib/actions/audio-host';
   import Nav from '$lib/components/nav/Nav.svelte';
+  import Toast from '$lib/components/Toast.svelte';
   import Visualizer from '$lib/components/Visualizer.svelte';
   import Editor from '$lib/components/editor/Editor.svelte';
   import { status, Status } from '$lib/stores/status';
@@ -15,12 +16,18 @@
   let vimBar1;
   /** @type {HTMLDivElement} */
   let vimBar2;
+  /** @type {string} */
+  let error = '';
 
   $: {
     switch ($status) {
       case Status.play:
-        runEditorProcessor();
-        runEditorMain();
+        try {
+          runEditorProcessor();
+          runEditorMain();
+        } catch (/** @type {any} */ e) {
+          error = e.message;
+        }
         // TODO: check for compile error, set status to stop or something - tzfeng
         break;
       case Status.running:
@@ -34,6 +41,8 @@
         stopContext();
     }
   }
+
+  const handleToastDismiss = () => setTimeout(() => error = '', 250);
 </script>
 
 <svelte:document on:click={ clickOutsideListener } />
@@ -58,3 +67,5 @@
     <div class="vimBar" bind:this={vimBar2}></div>
   </section>
 </main>
+
+<Toast on:click={handleToastDismiss} show={!!error}>{error}</Toast>

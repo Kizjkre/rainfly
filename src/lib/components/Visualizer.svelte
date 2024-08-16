@@ -2,7 +2,7 @@
   import ActionButton from "./ActionButton.svelte";
 </script>
 
-<section class="-z-50">
+<section class="">
   Visualizer...
   <div id="action-buttons">
     <ActionButton />
