@@ -2,7 +2,7 @@
   import { resumeContext, stopContext, suspendContext } from '$lib/utils/audio-host';
   import Nav from '$lib/components/nav/Nav.svelte';
   import Visualizer from '$lib/components/Visualizer.svelte';
-  import Editor from '$lib/components/editor/Editor.svelte';
+  import Editor from '$lib/components/Editor.svelte';
   import { status, Status } from '$lib/stores/status';
   import { vimStatus } from '$lib/stores/vim-status';
   import clickOutsideListener from '$lib/utils/clickOutside';

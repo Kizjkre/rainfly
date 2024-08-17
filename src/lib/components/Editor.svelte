@@ -2,7 +2,8 @@
   import Toast from '$lib/components/Toast.svelte';
   import { onDestroy, onMount } from 'svelte';
   import { runProcessorCode, runMainCode } from '$lib/utils/audio-host.js';
-  import { vimStatus } from '$lib/stores/vim-status';
+  import { vimStatus } from '$lib/stores/vim-status.js';
+  import { status, Status } from '$lib/stores/status.js';
 
   /**
    * @type {string} - "processor" | "main"
@@ -17,9 +18,9 @@
     'main': 1
   });
 
-  /** @type {typeof import('../../utils/monaco.js').default} */
+  /** @type {typeof import('../utils/monaco.js').default} */
   let monaco;
-  /** @type {import('../../utils/monaco.js').default.editor.IStandaloneCodeEditor} */
+  /** @type {import('../utils/monaco.js').default.editor.IStandaloneCodeEditor} */
   let editor;
   /** @type {HTMLDivElement} */
   let editorContainer;
@@ -30,9 +31,10 @@
   let vimMode;
   /** @type {HTMLDivElement} */
   export let vimBar;
-
+  /** @type {string} */
   let errorMsg = '';
-  let handleToggle;
+  /** @type {() => any} */
+  let handleError;
 
   let isMounted = false;
 
@@ -45,7 +47,7 @@
   }
 
   onMount(async () => {
-    monaco = (await import('../../utils/monaco.js')).default;
+    monaco = (await import('../utils/monaco.js')).default;
     initVimMode = (await import('monaco-vim')).initVimMode;
 
     const templateCode = editorType === editorTypes.processor ?
@@ -93,13 +95,13 @@
 
   export function initVim() {
     vimMode = initVimMode(editor, vimBar);
-    vimStatus.set(true);
+    $vimStatus = true;
     resizeEditor();
   }
 
   export function stopVim() {
     vimMode?.dispose();
-    vimStatus.set(false);
+    $vimStatus = false;
     resizeEditor();
   }
 
@@ -123,22 +125,22 @@
     } else {
       try {
         await runMainCode(code);
-        handleToggle(false);
+        handleError(false);
       } catch (/** @type {any} */ error) {
         errorMsg = error.message;
-        handleToggle(true);
+        handleError(true);
         throw error;
       }
     }
   }
 
   function initKeyBindings() {
-    // editor.addAction({
-    //   id: 'runCode',
-    //   label: 'runCode',
-    //   keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
-    //   run: function() {runEditorCode()}
-    // });
+    editor.addAction({
+      id: 'runCode',
+      label: 'runCode',
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
+      run: () => $status === Status.stop && ($status = Status.play)
+    });
   }
 </script>
 
@@ -152,7 +154,7 @@
   <div class="editor-container" bind:this={editorContainer} />
 </div>
 
-<Toast bind:handleToggle={handleToggle}>{errorMsg}</Toast>
+<Toast bind:handleToggle={handleError}>{errorMsg}</Toast>
 
 
 <style lang="postcss">
