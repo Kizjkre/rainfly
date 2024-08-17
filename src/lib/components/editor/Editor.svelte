@@ -32,6 +32,7 @@
   export let vimBar;
 
   let errorMsg = '';
+  let handleToggle;
 
   let isMounted = false;
 
@@ -122,9 +123,10 @@
     } else {
       try {
         await runMainCode(code);
-        dismissError();
+        handleToggle(false);
       } catch (/** @type {any} */ error) {
         errorMsg = error.message;
+        handleToggle(true);
         throw error;
       }
     }
@@ -138,13 +140,6 @@
     //   run: function() {runEditorCode()}
     // });
   }
-
-  function dismissError() {
-    setTimeout(() => {
-      errorMsg = '';
-    }, 250);
-  }
-
 </script>
 
 <svelte:window on:resize={resizeEditor} />
@@ -157,7 +152,7 @@
   <div class="editor-container" bind:this={editorContainer} />
 </div>
 
-<Toast on:click={dismissError} show={errorMsg !== ''}>{errorMsg}</Toast>
+<Toast bind:handleToggle={handleToggle}>{errorMsg}</Toast>
 
 
 <style lang="postcss">

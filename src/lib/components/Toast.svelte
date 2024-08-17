@@ -1,15 +1,14 @@
 <script>
-  export let show = false;
+  let show = false;
 
-  const handleDismiss = () => show = false;
+  export const handleToggle = toggle => show = toggle;
 </script>
 
 <dialog
-  class="font-mono text-sm absolute bg-accent bottom-12 cursor-pointer m-0 ml-auto px-4 py-2 right-0 shadow-md"
+  class="font-mono text-sm absolute bg-accent bottom-12 cursor-pointer m-0 ml-auto px-4 py-2 right-0 shadow-md text-lg"
   class:toast-in={show}
   class:toast-out={!show}
-  on:click
-  on:click={handleDismiss}
+  on:click={() => handleToggle(false)}
   open
 >
   <slot />

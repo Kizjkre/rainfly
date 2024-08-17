@@ -1,7 +1,6 @@
 <script>
   import { resumeContext, stopContext, suspendContext } from '$lib/utils/audio-host';
   import Nav from '$lib/components/nav/Nav.svelte';
-  import Toast from '$lib/components/Toast.svelte';
   import Visualizer from '$lib/components/Visualizer.svelte';
   import Editor from '$lib/components/editor/Editor.svelte';
   import { status, Status } from '$lib/stores/status';
@@ -39,7 +38,7 @@
     try {
       await runEditorMain();
     } catch (error) {
-      status.set(Status.stop);
+      $status = Status.stop;
       throw error;
     }
   }
