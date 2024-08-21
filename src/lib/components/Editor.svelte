@@ -33,7 +33,7 @@
   export let vimBar;
   /** @type {string} */
   let errorMsg = '';
-  /** @type {() => any} */
+  /** @type {(state: boolean) => any} */
   let handleError;
 
   let isMounted = false;
@@ -139,7 +139,9 @@
       id: 'runCode',
       label: 'runCode',
       keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
-      run: () => $status === Status.stop && ($status = Status.play)
+      run: () => {
+        $status === Status.stop && ($status = Status.play)
+      }
     });
   }
 </script>
