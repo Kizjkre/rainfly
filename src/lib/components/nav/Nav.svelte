@@ -6,11 +6,11 @@
   import NavView from '$lib/components/nav/items/NavView.svelte';
 </script>
 
-<nav class="bg-secondary border border-x-8 border-y-4 border-white box-border flex gap-8 h-full items-center pl-20 pr-4 py-1 rounded-full w-full">
+<nav class="bg-secondary border border-b-0 border-x-8 border-t-4 border-white box-border flex gap-8 h-full items-center pl-20 pr-4 py-1 rounded-full w-full">
   <NavFile />
   <NavView />
   <NavExamples />
   <NavHelp />
 </nav>
 
-<img alt="rainfly logo" class="absolute left-3 h-12 z-40" src={logo}>
+<img alt="rainfly logo" class="absolute left-6 top-1 w-11 z-40" src={logo}>
