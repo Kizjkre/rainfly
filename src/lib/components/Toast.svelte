@@ -5,7 +5,8 @@
 </script>
 
 <dialog
-  class="font-mono text-sm absolute bg-accent bottom-12 cursor-pointer m-0 ml-auto right-0 shadow-md"
+  class="font-mono text-sm absolute bg-accent bottom-12 cursor-pointer m-0
+  ml-auto right-0 shadow-md"
   class:toast-in={show}
   class:toast-out={!show}
   open

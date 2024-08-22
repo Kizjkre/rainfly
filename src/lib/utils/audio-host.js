@@ -1,35 +1,35 @@
 // import AsyncFunction
-const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+const AsyncFunction = Object.getPrototypeOf(async function() {}).constructor;
 
 /**
  * @type {AudioContext | undefined}
  */
 let context;
 let sampleRate = 48000;
-let _blobUrl = "";
+let _blobUrl = '';
 
 /**
  * Replace addModule url to be blobUrl for AudioWorkletNode
  * @param {string} code - code containing addModule function
- * @returns code with addModule url replaced to blobUrl
+ * @return {string} code with addModule url replaced to blobUrl
  */
 function replaceModuleUrl(code) {
-    if (_blobUrl === "") {
-        return code;
-    }
-    return code.replace(/addModule\(["'].*?["']\)/, `addModule('${_blobUrl}')`);
+  if (_blobUrl === '') {
+    return code;
+  }
+  return code.replace(/addModule\(["'].*?["']\)/, `addModule('${_blobUrl}')`);
 }
 
 /**
  * Parse parameter from header code comments
  * @param {string} code code to parse
  * @param {string} paramName // @paramName = value
- * @returns {number | null} parsed value or null
+ * @return {number | null} parsed value or null
  */
 function parseParam(code, paramName) {
-    const regex = new RegExp(`@${paramName}\\s*=\\s*(\\d+)`);
-    const match = code.match(regex);
-    return match ? parseInt(match[1], 10) : null;
+  const regex = new RegExp(`@${paramName}\\s*=\\s*(\\d+)`);
+  const match = code.match(regex);
+  return match ? parseInt(match[1], 10) : null;
 }
 
 /**
@@ -37,38 +37,47 @@ function parseParam(code, paramName) {
  * @param {string} code - Processor code to run
  */
 export function runProcessorCode(code) {
-    _blobUrl = window.URL.createObjectURL(
-        new Blob([code], {type: 'text/javascript'})
-    );
+  _blobUrl = window.URL.createObjectURL(
+      new Blob([code], {type: 'text/javascript'}),
+  );
 }
 
 /**
  * Run AudioContext code to execute Web Audio Code. If this code contains
- * AudioWorklet instantiation, `runProcessorCode` must be run first. 
+ * AudioWorklet instantiation, `runProcessorCode` must be run first.
  * @param {string} code - AudioContext Graph code to run
  */
 export async function runMainCode(code) {
-    await context?.close();
+  await context?.close();
 
-    const tryParseSampleRate = parseParam(code, "sampleRate");
-    sampleRate = tryParseSampleRate ? tryParseSampleRate : sampleRate;
-    context = new AudioContext({sampleRate})
+  const tryParseSampleRate = parseParam(code, 'sampleRate');
+  sampleRate = tryParseSampleRate ? tryParseSampleRate : sampleRate;
+  context = new AudioContext({sampleRate});
 
-    let codeModule = replaceModuleUrl(code)
+  const codeModule = replaceModuleUrl(code);
 
-    const evalFunction = new AsyncFunction('context', 'sampleRate', codeModule);
-    await evalFunction(context, sampleRate);
+  const evalFunction = new AsyncFunction('context', 'sampleRate', codeModule);
+  await evalFunction(context, sampleRate);
 }
 
+/**
+ * Resume the AudioContext
+ */
 export function resumeContext() {
-    context?.resume();
+  context?.resume();
 }
 
+/**
+ * Suspend the AudioContext
+ */
 export function suspendContext() {
-    context?.suspend();
+  context?.suspend();
 }
 
+/**
+ * Destroy the AudioContext
+ */
 export function stopContext() {
-    context?.close();
-    context = undefined;
+  context?.close();
+  context = undefined;
 }

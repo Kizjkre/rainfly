@@ -4,7 +4,7 @@ export const Status = Object.freeze({
   stop: 0,
   play: 1,
   running: 2,
-  pause: 3
+  pause: 3,
 });
 
 /**

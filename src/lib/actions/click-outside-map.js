@@ -4,7 +4,7 @@ const clickOutside = (node, callback) => {
   nodes.set(node, callback);
 
   return {
-    destroy: () => nodes.delete(node)
+    destroy: () => nodes.delete(node),
   };
 };
 

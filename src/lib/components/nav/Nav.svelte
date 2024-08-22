@@ -3,12 +3,12 @@
   import NavFile from '$lib/components/nav/items/NavFile.svelte';
   import logo from '$lib/assets/logo.svg';
   import NavHelp from '$lib/components/nav/items/NavHelp.svelte';
-  import NavView from '$lib/components/nav/items/NavView.svelte';
 </script>
 
-<nav class="bg-secondary border border-x-8 border-y-4 border-white box-border flex gap-8 h-full items-center pl-20 pr-4 py-1 rounded-full w-full">
+<nav class="w-full h-full pl-20 pr-4 py-1 bg-secondary flex gap-8
+  items-center border border-x-8 border-y-4 border-white box-border
+  rounded-full">
   <NavFile />
-  <NavView />
   <NavExamples />
   <NavHelp />
 </nav>

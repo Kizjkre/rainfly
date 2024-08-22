@@ -1,6 +1,6 @@
 <script>
-  import { onMount } from "svelte";
-  import ActionButton from "./ActionButton.svelte";
+  import {onMount} from 'svelte';
+  import ActionButton from './ActionButton.svelte';
 
   /** @type {HTMLCanvasElement} */
   let canvas;
@@ -14,11 +14,14 @@
 
   onMount(() => {
     RATIO = window.devicePixelRatio || 1;
-    context = canvas.getContext("2d");
+    context = canvas.getContext('2d');
     resizeCanvas();
     draw();
-  })
+  });
 
+  /**
+   * Draw the visualizer
+   */
   function draw() {
     if (context === null) return;
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -32,17 +35,17 @@
     context.beginPath();
     context.moveTo(0, height / 2);
     context.lineTo(width, height / 2);
-    context.strokeStyle = "red";
+    context.strokeStyle = 'red';
     context.lineWidth = 1 * RATIO;
     context.stroke();
     context.closePath();
 
-    // draw dotted lines 
+    // draw dotted lines
     context.beginPath();
     context.setLineDash([5, 15]);
     context.moveTo(0, height/2 + (height/2 * padding));
     context.lineTo(width, height/2 + (height/2 * padding));
-    context.strokeStyle = "red";
+    context.strokeStyle = 'red';
     context.stroke();
     context.closePath();
 
@@ -50,7 +53,7 @@
     context.setLineDash([5, 15]);
     context.moveTo(0, height/2 - (height/2 * padding));
     context.lineTo(width, height/2 - (height/2 * padding));
-    context.strokeStyle = "red";
+    context.strokeStyle = 'red';
     context.stroke();
     context.closePath();
 
@@ -58,8 +61,9 @@
     context.setLineDash([]);
 
 
-
-    const arr = Array(48000).fill(0).map((_, i) => Math.sin(i / 48000 * 440 * 2 * Math.PI));
+    const arr = Array(48000).fill(0).map((_, i) => {
+      return Math.sin(i / 48000 * 440 * 2 * Math.PI);
+    });
     if (arr.length > BAR_THRESHOLD) {
       // display whole sine wav
       const size = arr.length;
@@ -67,7 +71,7 @@
       // const downsampleHop = Math.floor(size / width / 10);
       const downsampleHop = 1;
       console.log(downsampleHop);
-      
+
 
       const increment = width / (size / downsampleHop);
       context.beginPath();
@@ -77,7 +81,7 @@
       for (let x = 0; x < width; x += increment, i+=downsampleHop) {
         context.lineTo(x, height/2 - (arr[i] * height/2 * padding));
       }
-      context.strokeStyle = "black";
+      context.strokeStyle = 'black';
       // stroke thickness
       context.lineWidth = 1.5 * RATIO;
       context.stroke();
@@ -85,11 +89,11 @@
     } else {
       // display sin wave like audacity does
       const size = arr.length;
-      
+
       // const downsampleHop = Math.floor(size / width / 10);
       const downsampleHop = 1;
       console.log(downsampleHop);
-      
+
 
       const increment = width / (size / downsampleHop);
 
@@ -100,7 +104,7 @@
         context.moveTo(x, height / 2);
         context.lineTo(x, height/2 - (arr[i] * height/2 * padding));
       }
-      context.strokeStyle = "black";
+      context.strokeStyle = 'black';
       // stroke thickness
       context.lineWidth = 1.5 * RATIO;
       context.stroke();
@@ -110,16 +114,18 @@
       i = 0;
       const squareSize = 4 * RATIO;
       for (let x = 0; x < width; x += increment, i+=downsampleHop) {
-        context.fillStyle = "black";
-        context.fillRect(x-squareSize / 2, 
+        context.fillStyle = 'black';
+        context.fillRect(x-squareSize / 2,
             height/2 - (arr[i] * height/2 * padding) - squareSize/2,
-            squareSize, 
+            squareSize,
             squareSize);
       }
     }
-
   }
 
+  /**
+   * Resize the visualizer canvas
+   */
   function resizeCanvas() {
     const width = canvas.clientWidth * RATIO;
     const height = canvas.clientHeight * RATIO;

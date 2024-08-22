@@ -1,10 +1,14 @@
 <script>
-  import { resumeContext, stopContext, suspendContext } from '$lib/utils/audio-host';
+  import {
+    resumeContext,
+    stopContext,
+    suspendContext,
+  } from '$lib/utils/audio-host';
+  import {status, Status} from '$lib/stores/status';
   import Nav from '$lib/components/nav/Nav.svelte';
   import Visualizer from '$lib/components/Visualizer.svelte';
   import Editor from '$lib/components/Editor.svelte';
-  import { status, Status } from '$lib/stores/status';
-  import clickOutsideListener from '$lib/utils/clickOutside';
+  import clickOutsideListener from '$lib/utils/click-outside';
 
   /** @type {(() => Promise<void>)} */
   let runEditorProcessor;
@@ -28,6 +32,9 @@
     }
   }
 
+  /**
+   * Run editor code and update status
+   */
   async function runCode() {
     runEditorProcessor();
     try {
@@ -39,7 +46,7 @@
   }
 </script>
 
-<svelte:document on:click={ clickOutsideListener } />
+<svelte:document on:click={clickOutsideListener} />
 
 <main class="grid grid-cols-2 grid-rows-main h-full w-full">
   <nav class="col-span-2">

@@ -7,16 +7,16 @@ export default {
       colors: {
         primary: '#94E170',
         secondary: '#FFFBD3',
-        accent: '#FD9494'
+        accent: '#FD9494',
       },
       fontFamily: {
         sans: ['"Outfit"', 'sans-serif'],
-        mono: ['"Anonymous Pro"', 'monospace']
+        mono: ['"Anonymous Pro"', 'monospace'],
       },
       gridTemplateRows: {
-        main: '3rem minmax(0, 4fr) minmax(0, 6fr)'
-      }
-    }
+        main: '3rem minmax(0, 4fr) minmax(0, 6fr)',
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 };
