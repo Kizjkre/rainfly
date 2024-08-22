@@ -13,4 +13,4 @@
   <NavHelp />
 </nav>
 
-<img alt="rainfly logo" class="absolute left-3 h-12 z-40" src={logo}>
+<img alt="rainfly logo" class="absolute left-6 top-1 w-11 z-40" src={logo}>
