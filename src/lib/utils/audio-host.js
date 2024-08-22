@@ -1,5 +1,3 @@
-import { parse } from "svelte/compiler";
-
 // import AsyncFunction
 const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
 
@@ -26,7 +24,7 @@ function replaceModuleUrl(code) {
  * Parse parameter from header code comments
  * @param {string} code code to parse
  * @param {string} paramName // @paramName = value
- * @returns parsed parameter value
+ * @returns {number | null} parsed value or null
  */
 function parseParam(code, paramName) {
     const regex = new RegExp(`@${paramName}\\s*=\\s*(\\d+)`);
@@ -53,19 +51,13 @@ export async function runMainCode(code) {
     await context?.close();
 
     const tryParseSampleRate = parseParam(code, "sampleRate");
-    if (tryParseSampleRate !== null) {
-        sampleRate = tryParseSampleRate;
-    }
+    sampleRate = tryParseSampleRate ? tryParseSampleRate : sampleRate;
     context = new AudioContext({sampleRate})
 
     let codeModule = replaceModuleUrl(code)
 
     const evalFunction = new AsyncFunction('context', 'sampleRate', codeModule);
-    try {
-        await evalFunction(context, sampleRate);
-    } catch (error) {
-        throw error;
-    }
+    await evalFunction(context, sampleRate);
 }
 
 export function resumeContext() {

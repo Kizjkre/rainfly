@@ -109,7 +109,7 @@
    * Update editor contents
    * @param code {string}
    */
-  function setEditorCode(code) {
+  export function setEditorCode(code) {
     editor?.setValue(code);
   }
 
