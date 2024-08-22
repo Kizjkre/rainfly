@@ -4,6 +4,7 @@
   import {runProcessorCode, runMainCode} from '$lib/utils/audio-host.js';
   import {vimStatus} from '$lib/stores/vim-status.js';
   import {status, Status} from '$lib/stores/status.js';
+  import {fetchTextFile} from '$lib/utils/file-loader.js';
 
   /**
    * @type {string} - "processor" | "main"
@@ -53,8 +54,8 @@
     initVimMode = (await import('monaco-vim')).initVimMode;
 
     const templateCode = editorType === EditorTypes.processor ?
-      await (await fetch('template/processor.js')).text() :
-      await (await fetch('template/main.js')).text();
+      (await fetchTextFile('template/processor.js')).data :
+      (await fetchTextFile('template/main.js')).data;
 
 
     editor = monaco.editor.create(editorContainer, {
@@ -208,7 +209,7 @@
 
 <div class="container">
   <div class="header">
-    <div class="title">
+    <div class="inline-block font-semibold">
       {editorType === EditorTypes.processor ? 'AudioWorkletProcessor' : 'Main'}
     </div>
     {#if editorType === EditorTypes.main}
@@ -244,10 +245,6 @@
 
   .vim-active {
     @apply bg-accent !important;
-  }
-
-  .title {
-    @apply inline-block font-semibold
   }
 
   .container {

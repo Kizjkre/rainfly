@@ -1,14 +1,14 @@
 <script>
+  import Nav from '$lib/components/nav/Nav.svelte';
+  import Visualizer from '$lib/components/Visualizer.svelte';
+  import Editor from '$lib/components/Editor.svelte';
+  import clickOutsideListener from '$lib/utils/click-outside';
+  import {status, Status} from '$lib/stores/status';
   import {
     resumeContext,
     stopContext,
     suspendContext,
   } from '$lib/utils/audio-host';
-  import {status, Status} from '$lib/stores/status';
-  import Nav from '$lib/components/nav/Nav.svelte';
-  import Visualizer from '$lib/components/Visualizer.svelte';
-  import Editor from '$lib/components/Editor.svelte';
-  import clickOutsideListener from '$lib/utils/click-outside';
 
   /** @type {(() => Promise<void>)} */
   let runEditorProcessor;
@@ -45,6 +45,12 @@
     }
   }
 </script>
+<script context="module">
+  /** @type {(code: string, editorName: 'processor' | 'main') => void} */
+  export let loadEditorProcessor;
+  /** @type {(code: string, editorName: 'processor' | 'main') => void} */
+  export let loadEditorMain;
+</script>
 
 <svelte:document on:click={clickOutsideListener} />
 
@@ -57,9 +63,11 @@
   </header>
 
   <section class="border-r border-black">
-    <Editor id="processor" bind:runEditorCode={runEditorProcessor} />
+    <Editor id="processor" bind:runEditorCode={runEditorProcessor}
+      bind:loadEditorCode={loadEditorProcessor}/>
   </section>
   <section class="border-l border-black">
-    <Editor id="main" bind:runEditorCode={runEditorMain} />
+    <Editor id="main" bind:runEditorCode={runEditorMain}
+      bind:loadEditorCode={loadEditorMain}/>
   </section>
 </main>
