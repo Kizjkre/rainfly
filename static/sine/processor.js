@@ -1,30 +1,31 @@
 class SineProcessor extends AudioWorkletProcessor {
-  constructor(processorOptions) {
+  static get parameterDescriptors() {
+    return [
+      { name: 'frequency', defaultValue: 440, },
+    ];
+  }
+
+  constructor() {
     super();
-    this.frequency = processorOptions.parameters['frequency'] || 440;
     this.phase = 0;
     this.inverseSampleRate = 1 / sampleRate;
   }
 
   process(inputs, outputs, parameters) {
-    const input = inputs[0];
     const output = outputs[0];
+    const frequency = parameters.frequency[0];
 
     for (let i = 0; i < output[0].length; ++i) {
-      output[channel][i] = Math.sin(this.phase * 2 * Math.PI);
-      this.phase += 2 * Math.PI * this.frequency * this.inverseSampleRate;
+      output[0][i] = Math.sin(2 * Math.PI * frequency * this.phase);
+      this.phase += this.inverseSampleRate;
+    }
+
+    for (let channel = 1; channel < output.length; ++channel) {
+      output[channel].set(output[0]);
     }
 
     return true;
   }
-
-  static get parameterDescriptors() {
-    return [
-      {
-        name: 'frequency',
-        defaultValue: 440,
-      },
-    ];
-  }
 }
+
 registerProcessor('sine-processor', SineProcessor);

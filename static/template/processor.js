@@ -11,4 +11,5 @@ class BypassProcessor extends AudioWorkletProcessor {
     return true;
   }
 }
+
 registerProcessor('bypass-processor', BypassProcessor);
