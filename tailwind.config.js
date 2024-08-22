@@ -14,7 +14,7 @@ export default {
         mono: ['"Anonymous Pro"', 'monospace']
       },
       gridTemplateRows: {
-        main: '3rem minmax(0, 4fr) minmax(0, 6fr) 1.5rem'
+        main: '3rem minmax(0, 4fr) minmax(0, 6fr)'
       }
     }
   },

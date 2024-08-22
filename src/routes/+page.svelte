@@ -4,17 +4,12 @@
   import Visualizer from '$lib/components/Visualizer.svelte';
   import Editor from '$lib/components/Editor.svelte';
   import { status, Status } from '$lib/stores/status';
-  import { vimStatus } from '$lib/stores/vim-status';
   import clickOutsideListener from '$lib/utils/clickOutside';
 
   /** @type {(() => Promise<void>)} */
   let runEditorProcessor;
   /** @type {(() => Promise<void>)} */
   let runEditorMain;
-  /** @type {HTMLDivElement} */
-  let vimBar1;
-  /** @type {HTMLDivElement} */
-  let vimBar2;
 
   $: {
     switch ($status) {
@@ -55,16 +50,9 @@
   </header>
 
   <section class="border-r border-black">
-    <Editor id="processor" bind:runEditorCode={runEditorProcessor} bind:vimBar={vimBar1} />
+    <Editor id="processor" bind:runEditorCode={runEditorProcessor} />
   </section>
   <section class="border-l border-black">
-    <Editor id="main" bind:runEditorCode={runEditorMain} bind:vimBar={vimBar2} />
-  </section>
-
-  <section class:hidden={!$vimStatus}>
-    <div class="vimBar" bind:this={vimBar1}></div>
-  </section>
-  <section class:hidden={!$vimStatus}>
-    <div class="vimBar" bind:this={vimBar2}></div>
+    <Editor id="main" bind:runEditorCode={runEditorMain} />
   </section>
 </main>
