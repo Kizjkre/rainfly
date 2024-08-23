@@ -1,6 +1,8 @@
 <script>
   import {onMount} from 'svelte';
   import ActionButton from './ActionButton.svelte';
+  import {getRecordedSamples, getSampleRate} from '$lib/utils/audio-host.js'
+  import {status, Status} from '$lib/stores/status';
 
   /** @type {HTMLCanvasElement} */
   let canvas;
@@ -10,13 +12,22 @@
   let RATIO;
   /** @type {number} */
   const BAR_THRESHOLD = 250;
+  const ACCENT_COLOR = '#FD9494';
+  const PRIMARY_COLOR = '#76B359'
 
+  $: {
+    if ($status === Status.play || $status === Status.running) {
+      console.log($status);
+      draw();
+    } else if ($status === Status.stop) {
+      clearCanvas();
+    }
+  }
 
   onMount(() => {
     RATIO = window.devicePixelRatio || 1;
     context = canvas.getContext('2d');
     resizeCanvas();
-    draw();
   });
 
   /**
@@ -31,47 +42,20 @@
     const height = canvas.height;
     const padding = 0.8;
 
-    // draw x-axis
-    context.beginPath();
-    context.moveTo(0, height / 2);
-    context.lineTo(width, height / 2);
-    context.strokeStyle = 'red';
-    context.lineWidth = 1 * RATIO;
-    context.stroke();
-    context.closePath();
+    drawAxis(width, height, padding);
 
-    // draw dotted lines
-    context.beginPath();
-    context.setLineDash([5, 15]);
-    context.moveTo(0, height/2 + (height/2 * padding));
-    context.lineTo(width, height/2 + (height/2 * padding));
-    context.strokeStyle = 'red';
-    context.stroke();
-    context.closePath();
+    const samples = getRecordedSamples();
+    const displaySamples = samples[0] || [];
+    // const displaySamples = samples.length !== 0 ? samples[0] : [];
+    // if (displaySamples.length === 0) return;
 
-    context.beginPath();
-    context.setLineDash([5, 15]);
-    context.moveTo(0, height/2 - (height/2 * padding));
-    context.lineTo(width, height/2 - (height/2 * padding));
-    context.strokeStyle = 'red';
-    context.stroke();
-    context.closePath();
-
-    // reset line dash
-    context.setLineDash([]);
-
-
-    const arr = Array(48000).fill(0).map((_, i) => {
-      return Math.sin(i / 48000 * 440 * 2 * Math.PI);
-    });
-    if (arr.length > BAR_THRESHOLD) {
+    // visualize the samples
+    if (displaySamples.length > BAR_THRESHOLD) {
       // display whole sine wav
-      const size = arr.length;
+      const size = displaySamples.length;
 
       // const downsampleHop = Math.floor(size / width / 10);
       const downsampleHop = 1;
-      console.log(downsampleHop);
-
 
       const increment = width / (size / downsampleHop);
       context.beginPath();
@@ -79,32 +63,29 @@
 
       let i = 0;
       for (let x = 0; x < width; x += increment, i+=downsampleHop) {
-        context.lineTo(x, height/2 - (arr[i] * height/2 * padding));
+        context.lineTo(x, height/2 - (displaySamples[i] * height/2 * padding));
       }
-      context.strokeStyle = 'black';
+      context.strokeStyle = PRIMARY_COLOR;
       // stroke thickness
       context.lineWidth = 1.5 * RATIO;
       context.stroke();
       context.closePath();
     } else {
-      // display sin wave like audacity does
-      const size = arr.length;
+      // display sin wave as bars like audacity
+      const size = displaySamples.length;
 
       // const downsampleHop = Math.floor(size / width / 10);
       const downsampleHop = 1;
-      console.log(downsampleHop);
-
 
       const increment = width / (size / downsampleHop);
-
 
       let i = 0;
       context.beginPath();
       for (let x = 0; x < width; x += increment, i+=downsampleHop) {
         context.moveTo(x, height / 2);
-        context.lineTo(x, height/2 - (arr[i] * height/2 * padding));
+        context.lineTo(x, height/2 - (displaySamples[i] * height/2 * padding));
       }
-      context.strokeStyle = 'black';
+      context.strokeStyle = PRIMARY_COLOR;
       // stroke thickness
       context.lineWidth = 1.5 * RATIO;
       context.stroke();
@@ -114,13 +95,63 @@
       i = 0;
       const squareSize = 4 * RATIO;
       for (let x = 0; x < width; x += increment, i+=downsampleHop) {
-        context.fillStyle = 'black';
+        context.fillStyle = PRIMARY_COLOR;
         context.fillRect(x-squareSize / 2,
-            height/2 - (arr[i] * height/2 * padding) - squareSize/2,
+            height/2 - (displaySamples[i] * height/2 * padding) - squareSize/2,
             squareSize,
             squareSize);
       }
     }
+
+    // Request animation frame
+    if ($status === Status.play || $status === Status.running) {
+      requestAnimationFrame(draw);
+    }
+  }
+
+  /**
+   * Draw the visualizer axes
+   * @param {number} width - canvas width
+   * @param {number} height - canvas height
+   * @param {number} padding - axes padding
+   */
+  function drawAxis(width, height, padding) {
+    if (context === null) return;
+    // draw x-axis
+    context.beginPath();
+    context.moveTo(0, height / 2);
+    context.lineTo(width, height / 2);
+    context.strokeStyle = ACCENT_COLOR;
+    context.lineWidth = 1 * RATIO;
+    context.stroke();
+    context.closePath();
+
+    // draw dotted lines
+    context.beginPath();
+    context.setLineDash([5, 15]);
+    context.moveTo(0, height/2 + (height/2 * padding));
+    context.lineTo(width, height/2 + (height/2 * padding));
+    context.strokeStyle = ACCENT_COLOR;
+    context.stroke();
+    context.closePath();
+
+    context.beginPath();
+    context.setLineDash([5, 15]);
+    context.moveTo(0, height/2 - (height/2 * padding));
+    context.lineTo(width, height/2 - (height/2 * padding));
+    context.strokeStyle = ACCENT_COLOR;
+    context.stroke();
+    context.closePath();
+
+    // reset line dash
+    context.setLineDash([]);
+  }
+
+  function clearCanvas() {
+    if (!context) return;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    drawAxis(canvas.width, canvas.height, 0.8);
   }
 
   /**

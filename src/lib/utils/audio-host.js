@@ -130,10 +130,8 @@ export function stopContext() {
 // -----------------------------------------------------------------------------
 
 /**
- * Returns the recorded samples as an object with channel numbers as keys and
- * arrays of recorded samples as values.
- *
- * @return {Object<number, number[]>} - The recorded samples.
+ * Return recorded samples
+ * @return {number[][]} - The recorded samples.
  */
 export function getRecordedSamples() {
   return recordedSamples;
@@ -141,7 +139,6 @@ export function getRecordedSamples() {
 
 /**
  * Returns the current sample rate of the AudioContext.
- *
  * @return {number} The current sample rate.
  */
 export function getSampleRate() {

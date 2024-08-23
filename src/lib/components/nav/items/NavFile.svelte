@@ -48,7 +48,7 @@
 
 <NavItem name="File">
   <NavDropdownItem>
-    Save
+    Save (coming soon)
   </NavDropdownItem>
   <NavDropdownItem on:click={exportWav}>
     Export to <code>.wav</code>

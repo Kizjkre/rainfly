@@ -66,6 +66,6 @@
 
 <style lang="postcss">
   button {
-    @apply p-4 bg-accent rounded-full;
+    @apply p-4 bg-primary rounded-full shadow-md;
   }
 </style>

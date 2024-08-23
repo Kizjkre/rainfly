@@ -5,12 +5,6 @@
 
 <NavItem name="Help">
   <NavDropdownItem>
-    Open
-  </NavDropdownItem>
-  <NavDropdownItem>
-    Save
-  </NavDropdownItem>
-  <NavDropdownItem>
-    Export to <code>.wav</code>
+    About (coming soon)
   </NavDropdownItem>
 </NavItem>
