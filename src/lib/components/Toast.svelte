@@ -1,4 +1,6 @@
 <script>
+  import portal from '$lib/actions/portal.js';
+
   export let show = false;
 
   export const handleToggle = (/** @type {boolean} */ toggle) => show = toggle;
@@ -10,6 +12,7 @@
   class:toast-in={show}
   class:toast-out={!show}
   open
+  use:portal
 >
   <button class="h-full px-4 py-2 w-full" on:click={() => handleToggle(false)}>
     <slot />
