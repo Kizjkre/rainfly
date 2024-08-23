@@ -243,7 +243,7 @@
 
 {#if editorType === EditorTypes.main}
   <Tooltip {anchor}>
-    Toggle VIm mode
+    Toggle Vim mode
   </Tooltip>
 {/if}
 

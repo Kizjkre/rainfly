@@ -8,7 +8,7 @@
 
 <dialog
   class="font-mono text-sm absolute bg-accent bottom-12 cursor-pointer m-0
-  ml-auto right-0 shadow-md"
+  ml-auto right-0 rounded shadow-md"
   class:toast-in={show}
   class:toast-out={!show}
   open

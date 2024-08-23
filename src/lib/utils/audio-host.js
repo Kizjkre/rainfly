@@ -11,9 +11,9 @@ let recorder;
 let sampleRate = 48000;
 let _blobUrl = '';
 
-//------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // EDITOR CODE HANDLING
-//------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 /**
  * Replace addModule url to be blobUrl for AudioWorkletNode
  * @param {string} code - code containing addModule function
@@ -82,9 +82,9 @@ export async function runMainCode(code) {
   await evalFunction(context, sampleRate, recorder);
 }
 
-//------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // AUDIO CONTEXT
-//------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 /**
  * Create an AudioContext and all the essentials for Rainfly audio processing
  */
@@ -125,13 +125,25 @@ export function stopContext() {
   recordedSamples = [];
 }
 
-//------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // RECORDER
-//------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+
+/**
+ * Returns the recorded samples as an object with channel numbers as keys and
+ * arrays of recorded samples as values.
+ *
+ * @return {Object<number, number[]>} - The recorded samples.
+ */
 export function getRecordedSamples() {
   return recordedSamples;
 }
 
+/**
+ * Returns the current sample rate of the AudioContext.
+ *
+ * @return {number} The current sample rate.
+ */
 export function getSampleRate() {
   return sampleRate;
 }

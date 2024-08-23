@@ -2,31 +2,37 @@
   import NavItem from '$lib/components/nav/NavItem.svelte';
   import NavDropdownItem from '$lib/components/nav/NavDropdownItem.svelte';
   import Toast from '$lib/components/Toast.svelte';
-  import {getRecordedSamples, getSampleRate} from '$lib/utils/audio-host'
-  import {audioBufferToWav} from '$lib/utils/audio-buffer-to-wav'
+  import {getRecordedSamples, getSampleRate} from '$lib/utils/audio-host';
+  import {audioBufferToWav} from '$lib/utils/audio-buffer-to-wav';
 
   /** @type {(state: boolean) => any} */
   let showError;
-  let errorMsg = ''
+  let errorMsg = '';
 
+  /**
+   * Exports the recorded audio samples as a .wav file.
+   *
+   * @function
+   * @return {void}
+   */
   function exportWav() {
     const recordedSamples = getRecordedSamples();
-    const sampleRate = getSampleRate()
-    console.log(recordedSamples)
+    const sampleRate = getSampleRate();
+    console.log(recordedSamples);
     if (recordedSamples.length === 0 || recordedSamples[0].length === 0) {
-      errorMsg = 'recording buffer is empty'
+      errorMsg = 'recording buffer is empty';
       console.error(errorMsg);
       showError(true);
-      return
+      return;
     }
     showError(false);
 
     const recordBuffer = new AudioBuffer({
       length: recordedSamples.length,
       numberOfChannels: 1,
-      sampleRate
-    })
-    recordBuffer.copyToChannel(new Float32Array(recordedSamples[0]), 0)
+      sampleRate,
+    });
+    recordBuffer.copyToChannel(new Float32Array(recordedSamples[0]), 0);
     const recordBlob = audioBufferToWav(recordBuffer, true);
 
     const url = URL.createObjectURL(recordBlob);
