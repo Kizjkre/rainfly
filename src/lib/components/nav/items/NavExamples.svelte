@@ -24,23 +24,16 @@
 <NavItem name="Examples">
   <NavDropdownItem
     on:click={() => {
-      loadExample('template/main.js', 'template/processor.js');
+      loadExample('examples/bypass/main.js', 'examples/bypass/processor.js');
     }}
   >
     Hello Bypass
   </NavDropdownItem>
   <NavDropdownItem
     on:click={() => {
-      loadExample('sine/main.js', 'sine/processor.js');
+      loadExample('examples/sine/main.js', 'examples/sine/processor.js');
     }}
   >
     Hello Sine
-  </NavDropdownItem>
-  <NavDropdownItem
-    on:click={() => {
-      loadExample('template/main.js', 'template/processor.js');
-    }}
-  >
-    Shimmer Reverb
   </NavDropdownItem>
 </NavItem>

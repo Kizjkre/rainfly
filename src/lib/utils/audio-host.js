@@ -1,23 +1,40 @@
 // import AsyncFunction
 const AsyncFunction = Object.getPrototypeOf(async function() {}).constructor;
 
-/**
- * @type {AudioContext | undefined}
- */
+/** @type {number[][]} */
+export let recordedSamples = [[]];
+
+/** @type {AudioContext | undefined} */
 let context;
+/** @type {AudioWorkletNode | undefined} */
+let recorder;
 let sampleRate = 48000;
 let _blobUrl = '';
 
+//------------------------------------------------------------------------------
+// EDITOR CODE HANDLING
+//------------------------------------------------------------------------------
 /**
  * Replace addModule url to be blobUrl for AudioWorkletNode
  * @param {string} code - code containing addModule function
  * @return {string} code with addModule url replaced to blobUrl
  */
-function replaceModuleUrl(code) {
+function transformWorkletModuleUrl(code) {
   if (_blobUrl === '') {
     return code;
   }
   return code.replace(/addModule\(["'].*?["']\)/, `addModule('${_blobUrl}')`);
+}
+
+/**
+ * Find and replace all instances of a string in a code block
+ * @param {string} code - code block to search
+ * @param {string} find - string to find
+ * @param {string} replace - string to replace
+ * @return {string} transformed code block
+ */
+function findReplace(code, find, replace) {
+  return code.replace(new RegExp(find, 'g'), replace);
 }
 
 /**
@@ -52,12 +69,36 @@ export async function runMainCode(code) {
 
   const tryParseSampleRate = parseParam(code, 'sampleRate');
   sampleRate = tryParseSampleRate ? tryParseSampleRate : sampleRate;
+
+  await createContext();
+
+  let transformCode = transformWorkletModuleUrl(code);
+  transformCode = findReplace(transformCode,
+      'context.destination',
+      'recorder).connect(context.destination');
+
+  const evalFunction = new AsyncFunction('context', 'sampleRate', 'recorder',
+      transformCode);
+  await evalFunction(context, sampleRate, recorder);
+}
+
+//------------------------------------------------------------------------------
+// AUDIO CONTEXT
+//------------------------------------------------------------------------------
+/**
+ * Create an AudioContext and all the essentials for Rainfly audio processing
+ */
+async function createContext() {
   context = new AudioContext({sampleRate});
-
-  const codeModule = replaceModuleUrl(code);
-
-  const evalFunction = new AsyncFunction('context', 'sampleRate', codeModule);
-  await evalFunction(context, sampleRate);
+  await context.audioWorklet.addModule('processor/recorder-processor.js');
+  recorder = new AudioWorkletNode(context, 'recorder-processor');
+  recorder.port.onmessage = (event) => {
+    // if channel doesn't exist, create it with empty array
+    if (!(event.data.channel in recordedSamples)) {
+      recordedSamples[event.data.channel] = [];
+    }
+    recordedSamples[event.data.channel].push(...event.data.data);
+  };
 }
 
 /**
@@ -80,4 +121,17 @@ export function suspendContext() {
 export function stopContext() {
   context?.close();
   context = undefined;
+  recorder = undefined;
+  recordedSamples = [];
+}
+
+//------------------------------------------------------------------------------
+// RECORDER
+//------------------------------------------------------------------------------
+export function getRecordedSamples() {
+  return recordedSamples;
+}
+
+export function getSampleRate() {
+  return sampleRate;
 }

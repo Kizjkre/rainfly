@@ -8,13 +8,13 @@
   let selected = false;
 
   const handleOpen = () => {
-    if (selected) setTimeout(() => dropdown.close(), 100);
+    if (selected) setTimeout(() => dropdown.close(), 200);
     else dropdown.show();
     selected = !selected;
   };
 
   const handleClickOutside = () => {
-    setTimeout(() => dropdown.close(), 100);
+    setTimeout(() => dropdown.close(), 200);
     selected = false;
   };
 </script>

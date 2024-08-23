@@ -37,7 +37,7 @@
   /** @type {string} */
   let errorMsg = '';
   /** @type {(state: boolean) => any} */
-  let handleError;
+  let showError;
 
   let isMounted = false;
 
@@ -54,8 +54,8 @@
     initVimMode = (await import('monaco-vim')).initVimMode;
 
     const templateCode = editorType === EditorTypes.processor ?
-      (await fetchTextFile('template/processor.js')).data :
-      (await fetchTextFile('template/main.js')).data;
+      (await fetchTextFile('examples/bypass/processor.js')).data :
+      (await fetchTextFile('examples/bypass/main.js')).data;
 
 
     editor = monaco.editor.create(editorContainer, {
@@ -137,10 +137,10 @@
     } else {
       try {
         await runMainCode(code);
-        handleError(false);
+        showError(false);
       } catch (/** @type {any} */ error) {
         errorMsg = error.message;
-        handleError(true);
+        showError(true);
         throw error;
       }
     }
@@ -235,7 +235,7 @@
   </section>
 </div>
 
-<Toast bind:handleToggle={handleError}>{errorMsg}</Toast>
+<Toast bind:handleToggle={showError}>{errorMsg}</Toast>
 
 
 <style lang="postcss">
