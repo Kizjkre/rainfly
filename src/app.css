@@ -98,6 +98,30 @@
   }
 }
 
+@keyframes appear {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes disappear {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
 body, html {
   height: 100vh;
   margin: 0;
@@ -129,6 +153,14 @@ body, html {
 
 .toast-out {
   animation: right-bounce-out 0.25s ease-in-out forwards;
+}
+
+.tooltip-in {
+  animation: appear 0.05s ease-in-out forwards;
+}
+
+.tooltip-out {
+  animation: disappear 0.05s ease-in-out forwards;
 }
 
 .vimBar {
