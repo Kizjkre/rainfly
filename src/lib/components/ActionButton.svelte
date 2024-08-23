@@ -66,6 +66,6 @@
 
 <style lang="postcss">
   button {
-    @apply p-4 bg-primary rounded-full shadow-md;
+    @apply p-4 bg-primary hover:shadow-xl rounded-full shadow-md transition;
   }
 </style>
