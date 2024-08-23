@@ -18,22 +18,24 @@
   function exportWav() {
     const recordedSamples = getRecordedSamples();
     const sampleRate = getSampleRate();
-    console.log(recordedSamples);
     if (recordedSamples.length === 0 || recordedSamples[0].length === 0) {
       errorMsg = 'recording buffer is empty';
       console.error(errorMsg);
       showError(true);
       return;
+    } else {
+      showError(false);
     }
-    showError(false);
 
+    const monoSamples = recordedSamples[0];
     const recordBuffer = new AudioBuffer({
-      length: recordedSamples.length,
+      length: monoSamples.length,
       numberOfChannels: 1,
       sampleRate,
     });
-    recordBuffer.copyToChannel(new Float32Array(recordedSamples[0]), 0);
+    recordBuffer.copyToChannel(new Float32Array(monoSamples), 0);
     const recordBlob = audioBufferToWav(recordBuffer, true);
+    console.log('exporting to wav (mono)', recordBuffer);
 
     const url = URL.createObjectURL(recordBlob);
     const a = document.createElement('a');
