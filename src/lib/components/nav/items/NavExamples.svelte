@@ -1,7 +1,7 @@
 <script>
   import NavItem from '$lib/components/nav/NavItem.svelte';
   import NavDropdownItem from '$lib/components/nav/NavDropdownItem.svelte';
-  import {fetchTextFile} from '$lib/utils/file-loader.js';
+  import {fetchTextFile} from '$lib/utils/file-utils.js';
   import {
     loadEditorProcessor,
     loadEditorMain,

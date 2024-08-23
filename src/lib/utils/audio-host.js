@@ -39,8 +39,8 @@ function findReplace(code, find, replace) {
 
 /**
  * Parse parameter from header code comments
- * @param {string} code code to parse
- * @param {string} paramName // @paramName = value
+ * @param {string} code - code to parse
+ * @param {string} paramName - syntax: // @paramName = value
  * @return {number | null} parsed value or null
  */
 function parseParam(code, paramName) {
@@ -128,18 +128,17 @@ export function stopContext() {
 // -----------------------------------------------------------------------------
 // RECORDER
 // -----------------------------------------------------------------------------
-
 /**
- * Return recorded samples
- * @return {number[][]} - The recorded samples.
+ * Get current recorded samples
+ * @return {Array<Array<number>>} - The recorded samples
  */
 export function getRecordedSamples() {
   return recordedSamples;
 }
 
 /**
- * Returns the current sample rate of the AudioContext.
- * @return {number} The current sample rate.
+ * Returns the current sample rate of the AudioContext
+ * @return {number} - The current sample rate
  */
 export function getSampleRate() {
   return sampleRate;

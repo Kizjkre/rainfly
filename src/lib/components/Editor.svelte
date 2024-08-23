@@ -5,7 +5,7 @@
   import {runProcessorCode, runMainCode} from '$lib/utils/audio-host.js';
   import {vimStatus} from '$lib/stores/vim-status.js';
   import {status, Status} from '$lib/stores/status.js';
-  import {fetchTextFile} from '$lib/utils/file-loader.js';
+  import {fetchTextFile} from '$lib/utils/file-utils.js';
 
   /**
    * @type {string} - "processor" | "main"
@@ -98,9 +98,9 @@
 
   /**
    * Get editor code
-   * @return {string} editor contents
+   * @return {string} editor contents or empty string if undefined
    */
-  function getEditorCode() {
+  export function getEditorCode() {
     return editor?.getValue() || '';
   }
 

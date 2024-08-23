@@ -50,6 +50,10 @@
   export let loadEditorProcessor;
   /** @type {(code: string, editorName: 'processor' | 'main') => void} */
   export let loadEditorMain;
+  /** @type {() => string} */
+  export let getEditorProcessor;
+  /** @type {() => string} */
+  export let getEditorMain;
 </script>
 
 <svelte:document on:click={clickOutsideListener} />
@@ -63,11 +67,15 @@
   </header>
 
   <section class="border-r border-black">
-    <Editor id="processor" bind:runEditorCode={runEditorProcessor}
-      bind:loadEditorCode={loadEditorProcessor}/>
+    <Editor id="processor"
+      bind:runEditorCode={runEditorProcessor}
+      bind:loadEditorCode={loadEditorProcessor}
+      bind:getEditorCode={getEditorProcessor}/>
   </section>
   <section class="border-l border-black">
-    <Editor id="main" bind:runEditorCode={runEditorMain}
-      bind:loadEditorCode={loadEditorMain}/>
+    <Editor id="main"
+      bind:runEditorCode={runEditorMain}
+      bind:loadEditorCode={loadEditorMain}
+      bind:getEditorCode={getEditorMain}/>
   </section>
 </main>

@@ -1,8 +1,8 @@
 <script>
-  import { onMount } from 'svelte';
+  import {onMount} from 'svelte';
   import ActionButton from './ActionButton.svelte';
-  import { getRecordedSamples, getSampleRate } from '$lib/utils/audio-host.js';
-  import { status, Status } from '$lib/stores/status';
+  import {getRecordedSamples} from '$lib/utils/audio-host.js';
+  import {status, Status} from '$lib/stores/status';
 
   /** @type {HTMLCanvasElement} */
   let canvas;
@@ -21,7 +21,7 @@
   const slice = {
     start: 0,
     end: Infinity,
-    full: true
+    full: true,
   };
 
   $: {
@@ -71,7 +71,8 @@
 
       let i = 0;
       for (let x = 0; x < width; x += increment, i += downsampleHop) {
-        context.lineTo(x, height / 2 - (displaySamples[i] * height / 2 * padding));
+        context.lineTo(x,
+            height / 2 - (displaySamples[i] * height / 2 * padding));
       }
       context.strokeStyle = PRIMARY_COLOR;
       // stroke thickness
@@ -91,7 +92,8 @@
       context.beginPath();
       for (let x = 0; x < width; x += increment, i += downsampleHop) {
         context.moveTo(x, height / 2);
-        context.lineTo(x, height / 2 - (displaySamples[i] * height / 2 * padding));
+        context.lineTo(x,
+            height / 2 - (displaySamples[i] * height / 2 * padding));
       }
       context.strokeStyle = PRIMARY_COLOR;
       // stroke thickness
@@ -105,9 +107,10 @@
       for (let x = 0; x < width; x += increment, i += downsampleHop) {
         context.fillStyle = PRIMARY_COLOR;
         context.fillRect(x - squareSize / 2,
-          height / 2 - (displaySamples[i] * height / 2 * padding) - squareSize / 2,
-          squareSize,
-          squareSize);
+            height / 2 - (displaySamples[i] * height / 2 * padding) -
+                squareSize / 2,
+            squareSize,
+            squareSize);
       }
     }
 
@@ -155,6 +158,9 @@
     context.setLineDash([]);
   }
 
+  /**
+   * Clear the canvas and draw the axes
+   */
   function clearCanvas() {
     if (!context) return;
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -177,8 +183,10 @@
     zoom = Math.max(0, Math.min(zoom + event.deltaY, MAX_ZOOM));
     slice.full = zoom === 0;
     const max = getRecordedSamples()[0].length;
-    const position = event.clientX / window.innerWidth * (slice.end - slice.start) + slice.start;
-    const radius = (max - MIN_SAMPLES) / MAX_ZOOM * (MAX_ZOOM - zoom) + MIN_SAMPLES;
+    const position = event.clientX / window.innerWidth *
+        (slice.end - slice.start) + slice.start;
+    const radius = (max - MIN_SAMPLES) / MAX_ZOOM * (MAX_ZOOM - zoom) +
+        MIN_SAMPLES;
     slice.start = Math.max(0, position - radius);
     slice.end = Math.min(max, position + radius);
     draw();
@@ -188,7 +196,9 @@
 <svelte:window on:resize={resizeCanvas} />
 
 <section>
-  <canvas id="visualizer" bind:this={canvas} on:wheel|preventDefault={handleWheel}></canvas>
+  <canvas id="visualizer" bind:this={canvas}
+      on:wheel|preventDefault={handleWheel}>
+  </canvas>
   <div id="action-buttons">
     <ActionButton />
   </div>
