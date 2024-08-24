@@ -32,6 +32,7 @@
       </div>
     </div>
     <div class="text-center text-sm">
+      <!-- eslint-disable-next-line no-undef -->
       <p>ver {meta.version}</p>
     </div>
   </div>

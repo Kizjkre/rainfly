@@ -6,6 +6,6 @@ export default defineConfig({
   plugins: [sveltekit()],
   // REF: https://stackoverflow.com/a/72141502
   define: {
-    meta: { version: JSON.parse(readFileSync('package.json', 'utf8')).version }
+    meta: {version: JSON.parse(readFileSync('package.json', 'utf8')).version},
   },
 });
