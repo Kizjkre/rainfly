@@ -2,6 +2,7 @@
   import NavItem from '$lib/components/nav/NavItem.svelte';
   import NavDropdownItem from '$lib/components/nav/NavDropdownItem.svelte';
   import Modal from '$lib/components/Modal.svelte';
+  import splash from '$lib/assets/splash.svg';
 
   /** @type {(state: boolean) => void}*/
   let showAbout;
@@ -19,7 +20,7 @@
         <p>An AudioWorklet DSP Playground for Chromium Web Audio API Project
           (2024)</p>
         <br>
-        <p>Created by Terry Feng and Tristan Peng</p>
+        <p>Created by <a href="https://github.com/terryzfeng">@terryzfeng</a> and <a href="https://github.com/kizjkre">@kizjkre</a></p>
         <br>
         <!-- TODO: Update with final URL-->
         <p>See
@@ -27,17 +28,16 @@
            for more information or to submit an issue</p>
       </div>
       <div class="pl-8">
-        <img src="favicon.svg" alt="Rainfly logo" class="w-96" />
+        <img src={splash} alt="Rainfly logo" class="w-96" />
       </div>
     </div>
     <div class="text-center text-sm">
-      <!-- TODO: MAKE AUTO VERSION TAG -->
-      <p>ver 1.0.0</p>
+      <p>ver {meta.version}</p>
     </div>
   </div>
 </Modal>
 
-<style use="postcss">
+<style lang="postcss">
   a {
     @apply text-blue-500 underline;
   }

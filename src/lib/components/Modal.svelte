@@ -23,7 +23,7 @@
   </button>
 </dialog>
 
-<style use="postcss">
+<style lang="postcss">
   dialog {
     transition: display .2s allow-discrete, overlay 1s allow-discrete;
     animation: appear .2s forwards;
@@ -31,9 +31,5 @@
 
   dialog:not([open]) {
     animation: disappear .2s forwards;
-  }
-
-  dialog::backdrop {
-    background: none;
   }
 </style>
