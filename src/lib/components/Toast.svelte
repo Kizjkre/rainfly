@@ -1,9 +1,9 @@
 <script>
-  import portal from '$lib/actions/portal.js';
+  import {portal} from '$lib/actions/portal.js';
 
   export let show = false;
 
-  export const handleToggle = (/** @type {boolean} */ toggle) => show = toggle;
+  export const handleToggle = (/** @type {boolean} */ state) => show = state;
 </script>
 
 <dialog

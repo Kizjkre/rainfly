@@ -1,7 +1,7 @@
 // import AsyncFunction
 const AsyncFunction = Object.getPrototypeOf(async function() {}).constructor;
 
-/** @type {number[][]} */
+/** @type {Array<Array<number>>} */
 export let recordedSamples = [[]];
 
 /** @type {AudioContext | undefined} */
@@ -122,7 +122,7 @@ export function stopContext() {
   context?.close();
   context = undefined;
   recorder = undefined;
-  recordedSamples = [];
+  recordedSamples = [[]];
 }
 
 // -----------------------------------------------------------------------------

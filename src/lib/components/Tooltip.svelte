@@ -1,6 +1,6 @@
 <script>
   import {onMount, tick} from 'svelte';
-  import portal from '$lib/actions/portal.js';
+  import {portal} from '$lib/actions/portal.js';
 
   /** @type {HTMLButtonElement} */
   export let anchor;

@@ -1,6 +1,6 @@
 <script>
-  import {onMount} from 'svelte';
   import ActionButton from './ActionButton.svelte';
+  import {onMount} from 'svelte';
   import {getRecordedSamples} from '$lib/utils/audio-host.js';
   import {status, Status} from '$lib/stores/status';
 
@@ -180,6 +180,9 @@
   }
 
   const handleWheel = (/** @type {WheelEvent} */ event) => {
+    const samples = getRecordedSamples();
+    if (samples && samples[0].length === 0) return;
+
     zoom = Math.max(0, Math.min(zoom + event.deltaY, MAX_ZOOM));
     slice.full = zoom === 0;
     const max = getRecordedSamples()[0].length;
@@ -189,6 +192,7 @@
         MIN_SAMPLES;
     slice.start = Math.max(0, position - radius);
     slice.end = Math.min(max, position + radius);
+
     draw();
   };
 </script>

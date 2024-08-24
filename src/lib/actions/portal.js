@@ -11,11 +11,9 @@ import {tick} from 'svelte';
  * @return {Object} An object containing the update and destroy methods for
  * ``the portal.
  */
-const portal = (el, target) => {
-  target ??= document.body.firstElementChild;
-
+export const portal = (el, target = 'div') => {
   let targetEl;
-  const update = async (newTarget) => {
+  const update = async (/** @type {string|HTMLElement} */ newTarget) => {
     target = newTarget;
     if (typeof target === 'string') {
       targetEl = document.querySelector(target);
@@ -46,5 +44,3 @@ const portal = (el, target) => {
     destroy,
   };
 };
-
-export default portal;
