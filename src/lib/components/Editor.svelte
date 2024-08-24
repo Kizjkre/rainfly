@@ -216,7 +216,7 @@
     {#if editorType === EditorTypes.main}
       <button
         on:click={toggleVim}
-        class="p-1 transition hover:bg-accent/75 rounded-sm"
+        class="p-1 transition hover:bg-accent/75"
         class:bg-accent={$vimStatus}
         bind:this={anchor}
       >

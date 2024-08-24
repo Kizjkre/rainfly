@@ -5,7 +5,7 @@
   import NavHelp from '$lib/components/nav/items/NavHelp.svelte';
 </script>
 
-<nav class="w-full h-full pl-16 pr-4 py-1 mt-1 bg-secondary flex gap-8
+<nav class="w-full h-full pl-16 pr-4 py-1 mt-1 bg-secondary flex gap-6
   items-center border border-x-8 border-b-4 border-white box-border
   rounded-full">
   <NavFile />

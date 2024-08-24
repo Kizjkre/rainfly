@@ -5,21 +5,40 @@
 
   /** @type {(state: boolean) => void}*/
   let showAbout;
-
-  function openAbout() {
-    showAbout(true);
-  }
 </script>
 
 <NavItem name="Help">
-  <NavDropdownItem on:click={openAbout}>
-    About (coming soon)
-  </NavDropdownItem>
+  <NavDropdownItem on:click={() => showAbout(true)}>About</NavDropdownItem>
 </NavItem>
 
 <Modal bind:showModal={showAbout}>
-  <div>
-    <h1 class="font-bold">Rainfly</h1>
-    <p>about</p>
+  <div class="w-full h-full p-4 text-left text-sm text-gray-600">
+    <div class="w-full flex justify-between pb-4">
+      <div>
+        <h1 class="font-bold text-4xl mb-3 text-black">Rainfly</h1>
+        <p>An AudioWorklet DSP Playground for Chromium Web Audio API Project
+          (2024)</p>
+        <br>
+        <p>Created by Terry Feng and Tristan Peng</p>
+        <br>
+        <!-- TODO: Update with final URL-->
+        <p>See
+          <a href="https://github.com/GoogleChromeLabs/web-audio-samples">GitHub</a>
+           for more information or to submit an issue</p>
+      </div>
+      <div class="pl-8">
+        <img src="favicon.svg" alt="Rainfly logo" class="w-96" />
+      </div>
+    </div>
+    <div class="text-center text-sm">
+      <!-- TODO: MAKE AUTO VERSION TAG -->
+      <p>ver 1.0.0</p>
+    </div>
   </div>
 </Modal>
+
+<style use="postcss">
+  a {
+    @apply text-blue-500 underline;
+  }
+</style>
